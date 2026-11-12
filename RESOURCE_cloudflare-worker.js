@@ -16,10 +16,26 @@ export default {
 
     const apiKey = env.OPENAI_API_KEY; // Make sure to name your secret OPENAI_API_KEY in the Cloudflare Workers dashboard
     const apiUrl = 'https://api.openai.com/v1/chat/completions';
-    const userInput = await request.json();
+
+    if (!apiKey) {
+      return new Response(JSON.stringify({ error: 'OPENAI_API_KEY is not configured.' }), {
+        status: 500,
+        headers: corsHeaders
+      });
+    }
+
+    let userInput;
+    try {
+      userInput = await request.json();
+    } catch (error) {
+      return new Response(JSON.stringify({ error: 'The request body must be valid JSON.' }), {
+        status: 400,
+        headers: corsHeaders
+      });
+    }
 
     const requestBody = {
-      model: 'gpt-4o',
+      model: 'gpt-4.1',
       messages: userInput.messages,
       max_completion_tokens: 300,
     };
@@ -35,6 +51,9 @@ export default {
 
     const data = await response.json();
 
-    return new Response(JSON.stringify(data), { headers: corsHeaders });
+    return new Response(JSON.stringify(data), {
+      status: response.status,
+      headers: corsHeaders
+    });
   }
 };
