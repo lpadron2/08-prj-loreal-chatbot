@@ -11,17 +11,22 @@ body {
   color: #333;
   display: flex;
   justify-content: center;
+
+
 }
 
 .page-wrapper {
   width: 90%;
   max-width: 900px;
+
 }
 
 /* header */
 .site-header {
   text-align: center;
   padding-top: 50px;
+  background-color: rgb(255 0 59);
+  border: rgb(227 166 53) 10px solid;
 }
 
 .site-title {
